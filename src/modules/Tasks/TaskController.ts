@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
 import TaskService from './TaskService';
+import { Request, Response } from 'express';
 
 class TaskController {
 
@@ -14,7 +14,7 @@ class TaskController {
 
     async getTaskById (req: Request, res: Response) {
         try {
-            const task = await TaskService.getTaskById(req.params.id);
+            const task = await TaskService.getTaskById(req.params.id as string);
             res.json(task);
         } catch (error) {
             res.status(500).json({ error: true, message: 'Failed to show task' });
@@ -32,7 +32,7 @@ class TaskController {
 
     async updateTask(req: Request, res: Response) {
         try {
-            const task = await TaskService.updateTask(req.params.id, req.body);
+            const task = await TaskService.updateTask(req.params.id as string, req.body);
             res.json(task);
         } catch (error) {
             res.status(500).json({ error: true, message: 'Failed to update task' });
@@ -41,7 +41,7 @@ class TaskController {
 
     async deleteTask(req: Request, res: Response) {
         try {
-            const task = await TaskService.deleteTask(req.params.id);
+            const task = await TaskService.deleteTask(req.params.id as string);
             res.json(task);
         } catch (error) {
             res.status(500).json({ error: true, message: 'Failed to delete task' });
