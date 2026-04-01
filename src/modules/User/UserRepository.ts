@@ -1,7 +1,4 @@
+import { AppDataSource } from "../../data-source";
+import { User } from "./UserEntity";
 
-
-class UserRepository {
-    
-};
-
-export default new UserRepository();
+export const userRepository = AppDataSource.getRepository(User);

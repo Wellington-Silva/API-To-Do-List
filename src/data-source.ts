@@ -1,5 +1,8 @@
 import "reflect-metadata";
+import "dotenv/config";
 import { DataSource } from "typeorm";
+import { Task } from "./modules/Tasks/TaskEntity";
+import { User } from "./modules/User/UserEntity";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -10,5 +13,5 @@ export const AppDataSource = new DataSource({
     database: "ToDoList",
     synchronize: false,
     logging: false,
-    entities: ["src/entity/*.ts"],
+    entities: [User, Task]
 });
