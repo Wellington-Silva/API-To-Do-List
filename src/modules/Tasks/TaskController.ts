@@ -5,14 +5,17 @@ class TaskController {
 
     async listTasks(req: Request, res: Response) {
         try {
-            const tasks = await TaskService.listTasks();
+            if (!req.user) {
+                return res.status(401).json({ error: true, message: "Unauthorized" });
+            }
+            const tasks = await TaskService.listTasks(req?.user?.id as string);
             res.json(tasks);
         } catch (error) {
             res.status(500).json({ error: true, message: 'Failed to list tasks' });
         }
     };
 
-    async getTaskById (req: Request, res: Response) {
+    async getTaskById(req: Request, res: Response) {
         try {
             const task = await TaskService.getTaskById(req.params.id as string);
             res.json(task);
@@ -26,15 +29,18 @@ class TaskController {
             const task = await TaskService.createTask(req.body);
             res.status(201).json(task);
         } catch (error) {
+            console.log(error);
             res.status(500).json({ error: true, message: 'Failed to create task' });
         }
     };
 
     async updateTask(req: Request, res: Response) {
         try {
-            const task = await TaskService.updateTask(req.params.id as string, req.body);
+            const id = req?.params.id;
+            const task = await TaskService.updateTask(id as string, req.body);
             res.json(task);
         } catch (error) {
+            console.log(error);
             res.status(500).json({ error: true, message: 'Failed to update task' });
         }
     };

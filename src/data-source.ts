@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: "ToDoList",
-    synchronize: false,
+    synchronize: true,
     logging: false,
     entities: [User, Task]
 });

@@ -3,15 +3,9 @@ import { taskRepository } from "./TaskRepository";
 
 class TaskService {
 
-    async listTasks(filters?: Partial<taskData>) {
-        const where: any = {};
-
-        if (filters?.isCompleted !== undefined) {
-            where.isCompleted = filters.isCompleted;
-        }
-
-        const tasks = await taskRepository.find({ where });
-
+    async listTasks(userId: string) {
+        const tasks = await taskRepository.find({ where: { userId } });
+        if (!tasks) throw new Error("Nenhuma tarefa cadastrada");
         return tasks;
     };
 
@@ -22,8 +16,16 @@ class TaskService {
     };
 
     async createTask(taskData: taskData) {
-        const task = taskRepository.create(taskData);
-        return task;
+        const { title, description, userId, date } = taskData;
+        const task = taskRepository.create({
+            title,
+            description,
+            userId,
+            date,
+            isCompleted: false
+        });
+        const savedTasks = await taskRepository.save(task);
+        return savedTasks;
     };
 
     async updateTask(id: string, taskData: taskData) {

@@ -1,5 +1,6 @@
-import { UserDTO } from "./UserDTO";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { UserDTO } from "./UserDTO";
 import { userRepository } from "./UserRepository";
 
 class UserService {
@@ -17,8 +18,28 @@ class UserService {
         const passwordHashed = bcrypt.hashSync(userData.password, 10);
         userData.password = passwordHashed;
 
-        const newUser = userRepository.create(userData);
-        return await userRepository.save(newUser);
+        const userCadastred = userRepository.create(userData);
+        const newUser = await userRepository.save(userCadastred);
+
+        const userJWT = {
+            id: newUser.id,
+            name: newUser.name,
+            birthDate: newUser.birthDate,
+            cellphone: newUser.cellphone,
+            email: newUser.email
+        }
+
+        try {
+            const token = jwt.sign(
+                userJWT,
+                process.env.JWT_SECRET as string, {
+                expiresIn: "5d"
+            });
+            return { token, ...newUser };
+        } catch (error) {
+            console.error("Erro ao gerar o token JWT:", error);
+            throw new Error("Erro ao criar o token JWT.");
+        }
     };
 
     async updateProfile(userId: string, profileData: UserDTO) {

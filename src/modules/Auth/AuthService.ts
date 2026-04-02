@@ -15,6 +15,7 @@ class AuthService {
 
         const userJWT = {
             id: user.id,
+            name: user.name,
             email: user.email,
             cellphone: user.cellphone,
             birthDate: user.birthDate

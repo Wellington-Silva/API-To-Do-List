@@ -17,7 +17,7 @@ AppDataSource.initialize()
     .then(() => {
 
         app.use("/api/auth", AuthRouter);
-        app.use("/api/user", UseRouter);
+        app.use("/api/users", UseRouter);
         app.use("/api/tasks", TaskRouter);
 
         app.listen(PORT, () => {
