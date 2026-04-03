@@ -31,7 +31,14 @@ class TaskService {
     async updateTask(id: string, taskData: taskData) {
         const task = await taskRepository.findOne({ where: { id } });
         if (!task) { throw new Error("Task not found"); };
-        Object.assign(task, taskData);
+
+        if (taskData.title) task.title = taskData.title;
+        if (taskData.description) task.description = taskData.description;
+        if (taskData.date) task.date = taskData.date;
+        if (taskData.isCompleted !== undefined) {
+            task.isCompleted = taskData.isCompleted;
+        }
+
         return taskRepository.save(task);
     };
 

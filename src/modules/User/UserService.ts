@@ -5,14 +5,14 @@ import { userRepository } from "./UserRepository";
 
 class UserService {
 
-    async getUserById (userId: string) {
+    async getUserById(userId: string) {
         const user = await userRepository.findOne({ where: { id: userId } });
         if (!user) { throw new Error("User not found"); };
         return user;
     };
 
     async createUser(userData: UserDTO) {
-        const user = await userRepository.findOne({ where: { email: userData.email }});
+        const user = await userRepository.findOne({ where: { email: userData.email } });
         if (user) { throw new Error("User already exists"); };
 
         const passwordHashed = bcrypt.hashSync(userData.password, 10);
@@ -44,7 +44,16 @@ class UserService {
 
     async updateProfile(userId: string, profileData: UserDTO) {
         const user = await this.getUserById(userId);
-        Object.assign(user, profileData);
+        if (profileData.name) user.name = profileData.name;
+        if (profileData.email) user.email = profileData.email;
+        if (profileData.cellphone) user.cellphone = profileData.cellphone;
+        if (profileData.birthDate) {
+            const date = new Date(profileData.birthDate);
+            if (isNaN(date.getTime())) {
+                throw new Error("Invalid birthDate");
+            }
+            user.birthDate = date;
+        }
         return await userRepository.save(user);
     };
 
