@@ -25,11 +25,10 @@ class UserController {
 
     async updateProfile(req: Request, res: Response) {
         try {
-            const userId = req?.params.id;
+            const userId = req?.user?.id;
             const user = await UserService.updateProfile(userId as string, req?.body);
-            return user;
+            res.json(user);
         } catch (error) {
-            console.log(error)
             res.status(500).json({ error: true, message:  "Failed to update user" });
         }
     };
