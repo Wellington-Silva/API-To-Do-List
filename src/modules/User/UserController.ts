@@ -35,9 +35,11 @@ class UserController {
 
     async deleteAccount(req: Request, res: Response) {
         try {
-            
+            const userId = req?.user?.id;
+            const userDeleted = await UserService.deleteAccount(userId as string);
+            return userDeleted;
         } catch (error) {
-            
+            res.status(500).json({ error: true, message: "Failed to delete account" });
         }
     };
 };

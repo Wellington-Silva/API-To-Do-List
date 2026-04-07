@@ -4,7 +4,7 @@ import { taskRepository } from "./TaskRepository";
 class TaskService {
 
     async listTasks(userId: string) {
-        const tasks = await taskRepository.find({ where: { userId } });
+        const tasks = await taskRepository.find({ where: { userId }, order: { id: 'ASC' } });
         if (!tasks) throw new Error("Nenhuma tarefa cadastrada");
         return tasks;
     };
